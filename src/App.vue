@@ -1,26 +1,63 @@
-<script setup>
-import Carousel from "./components/ImageCarousel.vue";
-import TheWelcome from "./components/ListSelectedImages.vue";
+<script>
+import Carousel from "./components/CarouselWrap.vue";
+import ListSelectedImages from "./components/ListSelectedImages.vue";
+
+export default {
+  components: {
+    Carousel,
+    ListSelectedImages,
+  },
+  data() {
+    return {
+      images: [],
+      selectedImages: [],
+    };
+  },
+  methods: {
+    async fetchImages() {
+      try {
+        const response = await fetch("https://picsum.photos/v2/list");
+        const data = await response.json();
+
+        this.images = data.map((img) => ({
+          url: `https://picsum.photos/id/${img.id}/600/400`,
+        }));
+      } catch (error) {
+        console.error("Помилка при завантаженні зображень:", error);
+      }
+    },
+    updateSelectedImages(selected) {
+      this.selectedImages = selected;
+    },
+  },
+  mounted() {
+    this.fetchImages();
+  },
+};
 </script>
 
 <template>
-  <header>
-    <p>Fronted Test task from Frontco</p>
-  </header>
+  <div class="wrapper">
+    <header class="header">
+      <p>Fronted test task from Frontco</p>
+    </header>
 
-  <main>
-    <div class="wrapper">
-      <Carousel />
-      <TheWelcome />
-    </div>
-  </main>
-  <footer>
-    <div class="footer__copyright">
-      Made by
-      <a href="https://github.com/LiliaBilous" target="_blank">LiliiaBilous</a>
-      in 2024
-    </div>
-  </footer>
+    <main class="content">
+      <Carousel
+        :images="images"
+        :selectedImages="selectedImages"
+        @updateSelectedImages="updateSelectedImages"
+      />
+      <ListSelectedImages :images="selectedImages" />
+    </main>
+    <footer class="footer">
+      <div>
+        Made by
+        <a class="footer__copyright" href="https://github.com/LiliaBilous" target="_blank"
+          >LiliiaBilous</a
+        >
+        in 2024
+      </div>
+    </footer>
+  </div>
 </template>
-
-<style scoped></style>
