@@ -1,7 +1,6 @@
 <template>
   <div class="content__carousel">
     <CarouselItem
-      :currentIndex="currentIndex"
       class="carousel"
       :images="visibleImages"
       @selectImage="selectImage"
@@ -39,7 +38,6 @@ export default {
     return {
       currentIndex: 0,
       imagesPerView: 1,
-      transitionDirection: "",
     };
   },
   computed: {
@@ -71,11 +69,9 @@ export default {
     },
 
     nextImage() {
-      this.transitionDirection = "slide-left";
       this.currentIndex = (this.currentIndex + 1) % this.images.length;
     },
     prevImage() {
-      this.transitionDirection = "slide-right";
       this.currentIndex =
         (this.currentIndex - 1 + this.images.length) % this.images.length;
     },
