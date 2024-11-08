@@ -1,17 +1,19 @@
 <template>
   <div class="content__carousel">
     <CarouselItem
+      :currentIndex="currentIndex"
+      class="carousel"
       :images="visibleImages"
       @selectImage="selectImage"
       :selectedImages="selectedImages"
     ></CarouselItem>
-    <div class="content__nav-buttons">
-      <button class="content__button" @click="prevImage">
-        <span class="button__icon>">&#10094;</span>
+    <div class="carousel__nav-buttons">
+      <button class="carousel__button" @click="prevImage">
+        <span>&#10094;</span>
         Prev
       </button>
-      <button class="content__button" @click="nextImage">
-        Next <span class="button__icon>">&#10095;</span>
+      <button class="carousel__button" @click="nextImage">
+        Next <span>&#10095;</span>
       </button>
     </div>
   </div>
@@ -37,6 +39,7 @@ export default {
     return {
       currentIndex: 0,
       imagesPerView: 1,
+      transitionDirection: "",
     };
   },
   computed: {
@@ -68,9 +71,11 @@ export default {
     },
 
     nextImage() {
+      this.transitionDirection = "slide-left";
       this.currentIndex = (this.currentIndex + 1) % this.images.length;
     },
     prevImage() {
+      this.transitionDirection = "slide-right";
       this.currentIndex =
         (this.currentIndex - 1 + this.images.length) % this.images.length;
     },
